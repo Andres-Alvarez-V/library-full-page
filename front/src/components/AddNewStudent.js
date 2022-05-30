@@ -10,7 +10,7 @@ const AddNewStudent = () => {
     const [newInfo, setNewInfo] = useState({
         "tipo_documento" : "CC",
         "numero_documento" : "",
-        "nombre_estudiante": "",
+        "nombre_estudiante": "", 
         "direccion_estudiante":"",
         "carrera_estudiante":"1",
         "edad_estudiante" : ""
@@ -31,6 +31,10 @@ const AddNewStudent = () => {
         return err;
     }
 
+    console.log(newInfo);
+    console.log(newInfo["tipo_documento"]+newInfo["numero_documento"])
+    
+
     const handleChange = (key,e) => {
         let updateValue = {...newInfo};
         updateValue[key] = e.target.value;
@@ -45,7 +49,7 @@ const AddNewStudent = () => {
         if (errorAux.size === 0) {
             try {
                 const body = { newInfo };
-                const response = await fetch("http://localhost:5000/new_student", {
+                const response = await fetch("http://localhost:3000/new_student", {
                     method: "POST",
                     headers: { "Content-Type":"application/json"},
                     body: JSON.stringify(body)
@@ -78,8 +82,9 @@ const AddNewStudent = () => {
                 <div class="row mb-3">
                     <div class="col-1">
                         <select class="form-select" aria-label="Default select example" onChange={(e) => handleChange('tipo_documento', e)}>
-                            <option value="1" selected>CC</option>
-                            <option value="2">TI</option>
+                            <option value="CC" selected>CC</option>
+                            <option value="TI">TI</option>
+                            <option value="CE">CE</option>
                         </select>
                     </div>
                     <div class="col-3">
@@ -98,8 +103,23 @@ const AddNewStudent = () => {
                 <div className='row mb-3'>
                     <div className='col-3'>
                         <select class="form-select" aria-label="Default select example" onChange={(e) => handleChange('carrera__estudiante', e)}>
-                                <option value="1" selected>Ingenieria Sistemas</option>
-                                <option value="2">Negocios Internacionales</option>
+                                <option value="1" selected>Biologia</option>
+                                <option value="2">Economia</option>
+                                <option value="3">Administracion</option>
+                                <option value="4">Negocios Internacionales</option>
+                                <option value="5">Fisica</option>
+                                <option value="6">Ing Matematica</option>
+                                <option value="7">Ing de sistemas</option>
+                                <option value="8">Ing de produccion</option>
+                                <option value="9">Ing industrial</option>
+                                <option value="10">Medicina</option>
+                                <option value="11">Derecho</option>
+                                <option value="12">Ciencias Politicas</option>
+                                <option value="13">Literatura</option>
+                                <option value="14">Musica</option>
+                                <option value="15">Psicologia</option>
+                                <option value="16">Ing Civil</option>
+                                <option value="17">Arquitectura</option>
                         </select>
                     </div>
                     <div class="col-3">

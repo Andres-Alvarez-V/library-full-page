@@ -2,21 +2,28 @@ import React, { useState } from 'react';
 
 
 const ShowStudents = () => {
-
     const [students, setStudents] = useState([]);
-
+    const deleteStudents = async id => {
+        try{
+            console.log(id);
+            const deleteStudents = await fetch(`http://localhost:3000/delete_student/${id}`, {
+                method: 'DELETE'
+            });
+            setStudents(students.filter(estudiante => estudiante.id_lector !== id));
+        } catch(err){
+            console.error(err.message);
+        }
+    };
     const getStudents = async () => {
-
         try {
-            const response = await fetch("http://localhost:5000/show_students");
+            const response = await fetch("http://localhost:3000/show_students");
             const jsonData = await response.json();
             setStudents(jsonData);
             console.log(jsonData);
         } catch (err) {
             console.log(err.message);
         }
-    }
-
+    };
     return (
         <>
             <div className='border-bottom border-1'>
@@ -50,16 +57,15 @@ const ShowStudents = () => {
                                     <td>{student.carrera}</td>
                                     <td>{student.edad}</td>
                                     <th><button className='btn btn-warning'>Editar</button></th>
-                                    <th><button className='btn btn-danger'>Eliminar</button></th>
+                                    <th><button className='btn btn-danger' 
+                                    onClick={() => deleteStudents(student.id_lector)}>Eliminar</button></th>
                                 </tr>
                             ))}
                         </tbody>
-
                     </table>
                 </div>
             }
         </>
     );
 };
-
 export default ShowStudents;
