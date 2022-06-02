@@ -7,6 +7,9 @@ const { json } = require("express");
 app.use(cors());
 app.use(express.json());
 //ROUTES//
+
+//STUDENTS
+
 //create
 app.post("/new_student", async(req, res) => {
     try {
@@ -42,8 +45,6 @@ app.get("/show_student/:ci", async(req, res) => {
     }
 });
 
-
-
 //get a todo
 app.get("/todos/:id", async(req, res) => {
     try {
@@ -77,6 +78,61 @@ app.delete("/delete_student/:id_lector", async(req, res) => {
     }
 });
 
+//Editorial
+
+app.post("/new_editorial", async(req, res) => {
+    try {
+        console.log(req.body)
+        const {nombre_editoriales, telefonos } = req.body.newEdit;
+        let telefono = telefonos;
+        let nombre_editorial = parseInt(nombre_editoriales);
+        const newEdit = await pool.query("INSERT INTO editorial (nombre_editorial, telefono) VALUES($1, $2) RETURNING *", [nombre_editorial, telefono]);
+        res.json(newEdit);
+    } catch (err) { 
+        res.status(900).send("Hubo un error al ejecutar la peticion");
+        console.log(err.message);
+    }
+});
+//gets
+app.get("/show_editorial/", async(req, res) => {
+    try {
+        const allEdits = await pool.query("SELECT * FROM editorial");
+        res.json(allEdits.rows);
+    } catch (err) {
+        console.log(err.message);
+    }
+});
+
+//Buscar editorial
+app.get("/show_editorial/:id_editorial", async(req, res) => {
+    try {
+        const edit = await pool.query("SELECT * FROM editorial where id_editorial  = $1", [req.params["id_editorial"]]);
+        res.json(edit.rows);
+    } catch (err) {
+        console.log(err.message);
+    }
+});
+
+//get a todo
+app.get("/todos/:id", async(req, res) => {
+    try {
+        const { id } =  req.params;
+        const allTodo = await pool.query("SELECT * FROM editorial WHERE id = $1", [id]);
+        res.json(allTodo.rows);
+    } catch (err) {
+        console.log(err.message);
+    }
+});
+
+// delete
+app.delete("/delete_editorial/:id_editorial", async(req, res) => {
+    try {
+        const deleteEditorial = await pool.query("DELETE FROM editorial WHERE id_editorial = $1", [req.params["id_editorial"]]);
+        res.json("Delete complete");
+    } catch (err) {
+        console.log(err.message);
+    }
+});
 
 app.listen(3000, () => {
     console.log("server is working");
