@@ -150,7 +150,7 @@ app.get("/show_prestamos/", async(req, res) => {
 //Buscar prestamo
 app.get("/show_prestamo/:fecha_prestamo", async(req, res) => {
     try {
-        const prestamoo = await pool.query("SELECT * FROM prestamo where fecha_prestamo  = $1", [req.params["fecha_prestamo"]]);
+        const prestamoo = await pool.query("SELECT * FROM prestamo where fecha_prestamo  = $2022-04-22", [req.params["fecha_prestamo"]]);
         res.json(prestamoo.rows);
     } catch (err) {
         console.log(err.message);

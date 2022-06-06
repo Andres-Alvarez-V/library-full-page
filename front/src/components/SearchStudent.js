@@ -106,7 +106,8 @@ const SearchStudent = () => {
                                 <td>{student["direccion"]}</td>
                                 <td>{student["carrera"]}</td>
                                 <td>{student["edad"]}</td>
-                                <th><button className='btn btn-warning'>Editar</button></th>
+                                <th><button className='btn btn-warning' 
+                                onClick={() => deleteStudents(student.id_lector)}>Editar</button></th>
                                 <th><button className='btn btn-danger' 
                                  onClick={() => deleteStudents(student.id_lector)}>Eliminar</button></th>
                             </tr>
