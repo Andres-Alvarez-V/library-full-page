@@ -5,6 +5,7 @@ import Error404 from '../pages/Error404';
 import Home from '../pages/Home';
 import Estudiantes from '../pages/Estudiantes';
 import Editoriales from '../pages/Editoriales';
+import Prestamos from '../pages/Prestamos';
 import Header from './Header';
 
 
@@ -16,6 +17,7 @@ const Principal = () => {
                     <Route path = "/" element = { <Home/>} /> 
                     <Route path = "/estudiantes" element = { <Estudiantes/>} />
                     <Route path = "/editoriales" element = { <Editoriales/>} />
+                    <Route path = "/prestamos" element = { <Prestamos/>} />
                     <Route path = "*" element = { <Error404/>} />
                 </Routes>
         </>

@@ -28,7 +28,7 @@ const ShowStudents = () => {
         <>
             <div className='border-bottom border-1'>
                 <div className='d-flex justify-content-center'>
-                    <button type="button" class="btn btn-outline-info my-3 me-3" onClick={getStudents}>Mostrar todos los estudiante</button>
+                    <button type="button" class="btn btn-outline-info my-3 me-3" onClick={getStudents}>Mostrar estudiantes</button>
                     {students.length !== 0 && 
                         <button type="button" class="btn btn-outline-danger my-3 mr-3" onClick={(e) => setStudents([])}>Ocultar estudiantes</button>
                     }

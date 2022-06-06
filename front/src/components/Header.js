@@ -20,13 +20,16 @@ const Header = () => {
                                 <ul className="dropdown-menu" aria-labelledby="navbarDropdown">
                                     <li><Link className="dropdown-item" to="/estudiantes">Estudiantes</Link></li>
                                     <li><Link className="dropdown-item" to="/editoriales">Editoriales</Link></li>
+                                    <li><Link className="dropdown-item" to="/prestamos">Prestamos</Link></li>
                                 </ul>
                             </li>
                         </ul>
                     </div>
                 </div>
             </nav>
+        <br></br>
         </>
+        
     );
 }
 
