@@ -31,17 +31,17 @@ const AddNewStudent = () => {
         return err;
     }
 
-    console.log(newInfo);
-    console.log(newInfo["tipo_documento"]+newInfo["numero_documento"])
+    // console.log(newInfo);
+    // console.log(newInfo["tipo_documento"]+newInfo["numero_documento"])
     
 
     const handleChange = (key,e) => {
         let updateValue = {...newInfo};
         updateValue[key] = e.target.value;
         setNewInfo(updateValue);
-     }
+    }
 
-     const handleSubmit = async (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
         const errorAux = checkValues();
         setErrors(errorAux);
@@ -80,7 +80,7 @@ const AddNewStudent = () => {
             <h6 className='mt-3'>Añadir nuevo estudiante: </h6>
             <form onSubmit={handleSubmit}>
                 <div class="row mb-3">
-                    <div class="col-1">
+                    <div class="col-2">
                         <select class="form-select" aria-label="Default select example" onChange={(e) => handleChange('tipo_documento', e)}>
                             <option value="CC" selected>CC</option>
                             <option value="TI">TI</option>
@@ -102,7 +102,7 @@ const AddNewStudent = () => {
                 </div>
                 <div className='row mb-3'>
                     <div className='col-3'>
-                        <select class="form-select" aria-label="Default select example" onChange={(e) => handleChange('carrera__estudiante', e)}>
+                        <select class="form-select" aria-label="Default select example" onChange={(e) => handleChange('carrera_estudiante', e)}>
                                 <option value="1" selected>Biologia</option>
                                 <option value="2">Economia</option>
                                 <option value="3">Administracion</option>

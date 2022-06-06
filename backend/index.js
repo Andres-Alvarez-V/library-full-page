@@ -15,6 +15,7 @@ app.post("/new_student", async(req, res) => {
         let CI = tipo_documento + "-" + numero_documento;
         let carrera = parseInt(carrera_estudiante);
         let edad = parseInt(edad_estudiante);
+        console.log(carrera);
         const newStudent = await pool.query("INSERT INTO estudiante (ci, nombre, direccion, carrera, edad) VALUES($1, $2, $3, $4, $5) RETURNING *", [CI, nombre_estudiante, direccion_estudiante, carrera, edad]);
         res.json(newStudent);
     } catch (err) { 
@@ -25,7 +26,7 @@ app.post("/new_student", async(req, res) => {
 //gets
 app.get("/show_students/", async(req, res) => {
     try {
-        const allStudents = await pool.query("SELECT * FROM estudiante");
+        const allStudents = await pool.query("SELECT estudiante.*,  carrera.nombre_programa FROM estudiante, carrera WHERE estudiante.carrera = carrera.carrera");
         res.json(allStudents.rows);
     } catch (err) {
         console.log(err.message);
@@ -42,31 +43,28 @@ app.get("/show_student/:ci", async(req, res) => {
     }
 });
 
-
-
-//get a todo
-app.get("/todos/:id", async(req, res) => {
-    try {
-        const { id } =  req.params;
-        const allTodo = await pool.query("SELECT * FROM estudiante WHERE id = $1", [id]);
-        res.json(allTodo.rows);
-    } catch (err) {
-        console.log(err.message);
-    }
-});
 //view a estudiantes 
 
 //updates
-app.put("/todos/:id", async(req, res) => {
+
+//editar estudiante
+app.put("/update_student/:id_lector", async(req, res) => {
     try {
-        const { id } =  req.params;
-        const { description } = req.body;
-        const updateTodo = await pool.query("UPDATE prueba SET description = $1 WHERE id = $2", [description, id]);
+        const { id_lector } =  req.params;
+        console.log(req.body)
+        const { tipo_documento, numero_documento, nombre_estudiante, direccion_estudiante, carrera_estudiante, edad_estudiante } = req.body.newInfo;
+        let CI = tipo_documento + "-" + numero_documento;
+        let carrera = parseInt(carrera_estudiante);
+        let edad = parseInt(edad_estudiante);
+        const updateStudent = await pool.query("UPDATE estudiante SET ci = $1, nombre = $2, direccion = $3, carrera = $4, edad = $5 WHERE id_lector = $6", [CI, nombre_estudiante, direccion_estudiante, carrera, edad, id_lector]);
         res.json("Update complete");
     } catch (err) {
         console.log(err.message);
     }
 });
+
+
+
 // delete
 app.delete("/delete_student/:id_lector", async(req, res) => {
     try {

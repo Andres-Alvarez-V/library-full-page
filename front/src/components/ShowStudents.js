@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import EditStudent from './EditStudent';
 
 
 const ShowStudents = () => {
@@ -54,9 +55,9 @@ const ShowStudents = () => {
                                     <td>{student.ci}</td>
                                     <td>{student.nombre}</td>
                                     <td>{student.direccion}</td>
-                                    <td>{student.carrera}</td>
+                                    <td>{student.nombre_programa}</td>
                                     <td>{student.edad}</td>
-                                    <th><button className='btn btn-warning'>Editar</button></th>
+                                    <th><EditStudent infoStudent = {student} getStudents = {getStudents}/></th>
                                     <th><button className='btn btn-danger' 
                                     onClick={() => deleteStudents(student.id_lector)}>Eliminar</button></th>
                                 </tr>

@@ -48,3 +48,8 @@
   margin-bottom: 0;	
   font-weight: bold;	
 }
+
+
+.modal-dialog{
+  max-width: 70%;
+}

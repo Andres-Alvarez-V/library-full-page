@@ -67,7 +67,7 @@ const SearchStudent = () => {
                 <h6>Buscar estudiante: </h6>
                 <form onSubmit={handleSubmit}>
                     <div class="row mb-3">
-                        <div class="col-1">
+                        <div class="col-2">
                             <select class="form-select" aria-label="Default select example" onChange={(e) => handleChange('tipo_documento', e)}>
                                 <option value="CC" selected>CC</option>
                                 <option value="TI">TI</option>
