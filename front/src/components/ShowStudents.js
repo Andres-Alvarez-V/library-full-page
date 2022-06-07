@@ -57,7 +57,7 @@ const ShowStudents = () => {
                                     <td>{student.direccion}</td>
                                     <td>{student.nombre_programa}</td>
                                     <td>{student.edad}</td>
-                                    <th><EditStudent infoStudent = {student} getStudents = {getStudents}/></th>
+                                    <th><EditStudent infoStudent = {student} /></th>
                                     <th><button className='btn btn-danger' 
                                     onClick={() => deleteStudents(student.id_lector)}>Eliminar</button></th>
                                 </tr>
