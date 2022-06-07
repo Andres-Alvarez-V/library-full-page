@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
-
+import PayFine from './PayFine'
 
 const ShowPrestamo = () => {
-    const [prestamos, setPrestamos] = useState([]);
+    const [prestamosActivosSinMulta, setPrestamosActivosSinMulta] = useState([]);
+    const [prestamosActivosMultados, setPrestamosActivosMultados] = useState([]);
 
     const deletePrestamos = async id => {
         try{
@@ -10,34 +11,63 @@ const ShowPrestamo = () => {
             const deletePrestamos = await fetch(`http://localhost:3000/delete_prestamo/${id}`, {
                 method: 'DELETE'
             });
-            setPrestamos(prestamos.filter(prestamo => prestamo.id_lector !== id));
+            setPrestamosActivosSinMulta(prestamosActivosSinMulta.filter(prestamo => prestamo.id_lector !== id));
         } catch(err){
             console.error(err.message);
         }
     };
 
-    const getPrestamos = async () => {
+    const getPrestamosMultados = async () => {  
+        ocultarPrestamos();
         try {
-            const response = await fetch("http://localhost:3000/show_prestamos");
+            const response = await fetch("http://localhost:3000/show_prestamos_multados");
+            console.log(response)
             const jsonData = await response.json();
-            setPrestamos(jsonData);
+            console.log(jsonData);
+            setPrestamosActivosMultados(jsonData);
+        } catch (err) {
+            console.log(err.message);
+        }
+    };
+
+    const getPrestamosSinMultar = async () => {
+        ocultarPrestamos();
+        try {
+            const response = await fetch("http://localhost:3000/show_prestamos_sin_multar");
+            const jsonData = await response.json();
+            setPrestamosActivosSinMulta(jsonData);
             console.log(jsonData);
         } catch (err) {
             console.log(err.message);
         }
     };
 
+    const ocultarPrestamos = () => {
+        setPrestamosActivosSinMulta([]);   
+        setPrestamosActivosMultados([]);
+    }
+
+    const multarPrestamo = async (id_lector, id_libro, fecha_prestamo) => {
+
+        const response = await fetch(`http://localhost:3000/multar_prestamo/${id_lector}/${id_libro}/${fecha_prestamo}`, {
+            method: "PUT",
+            headers: { "Content-Type":"application/json"},
+        });
+        getPrestamosSinMultar();
+    }
+
     return (
         <>
             <div className='border-bottom border-1'>
                 <div className='d-flex justify-content-center'>
-                    <button type="button" class="btn btn-outline-info my-3 me-3" onClick={getPrestamos}>Mostrar prestamos</button>
-                    {prestamos.length !== 0 && 
-                        <button type="button" class="btn btn-outline-danger my-3 mr-3" onClick={(e) => setPrestamos([])}>Ocultar prestamos</button>
+                    <button type="button" class="btn btn-outline-info my-3 me-3" onClick={getPrestamosMultados}>Mostrar prestamos activos Multados</button>
+                    <button type="button" class="btn btn-outline-info my-3 me-3" onClick={getPrestamosSinMultar}>Mostrar prestamos activos sin Multa</button>
+                    {(prestamosActivosSinMulta.length !== 0 || prestamosActivosMultados.length !== 0) &&
+                        <button type="button" class="btn btn-outline-danger my-3 mr-3" onClick={(e) => ocultarPrestamos()}>Ocultar prestamos</button>
                     }
                 </div>
             </div>
-            {prestamos.length !== 0 && 
+            {prestamosActivosSinMulta.length !== 0 && 
                 <div>
                     <table className='table mt-2 text-center'>
                         <thead>
@@ -55,7 +85,7 @@ const ShowPrestamo = () => {
                             </tr>
                         </thead>
                         <tbody>
-                            {prestamos.map(prestamo => (
+                            {prestamosActivosSinMulta.map(prestamo => (
                                 <tr key={prestamo.id_lector}>
                                     <td>{prestamo.ci}</td>
                                     <td>{prestamo.nombre}</td>
