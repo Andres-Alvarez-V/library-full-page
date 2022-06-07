@@ -109,7 +109,7 @@ app.get("/show_editorial/", async(req, res) => {
 //Buscar editorial
 app.get("/show_editorial/:id_editorial", async(req, res) => {
     try {
-        const edit = await pool.query("SELECT * FROM editorial where id_editorial = $1", [req.params["id_editorial"]]);
+        const edit = await pool.query("select * from editorial where nombre_editorial  = ? ", [req.params["nombre_editorial"]]);
         res.json(edit.rows);
     } catch (err) {
         console.log(err.message);
@@ -157,7 +157,7 @@ app.get("/show_prestamos/", async(req, res) => {
 //Buscar prestamo
 app.get("/show_prestamo/:fecha_prestamo", async(req, res) => {
     try {
-        const prestamoo = await pool.query("SELECT * FROM prestamo where fecha_prestamo  = $1", [req.params["fecha_prestamo"]]);
+        const prestamoo = await pool.query("SELECT * FROM prestamo where fecha_prestamo  = $2022-04-22", [req.params["fecha_prestamo"]]);
         res.json(prestamoo.rows);
     } catch (err) {
         console.log(err.message);

@@ -5,7 +5,6 @@ const Header = () => {
 
     return(
         <>
-
         <nav className="navbar navbar-expand-lg navbar-light bg-dark">
                 <div className="container-fluid">
                     <div className="collapse navbar-collapse" id="navbarSupportedContent">
@@ -27,7 +26,8 @@ const Header = () => {
                     </div>
                 </div>
             </nav>
-        <br></br>
+
+
         </>
         
     );
