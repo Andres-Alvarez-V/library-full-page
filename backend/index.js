@@ -157,7 +157,7 @@ app.get("/show_prestamos/", async(req, res) => {
 //Buscar prestamo
 app.get("/show_prestamo/:fecha_prestamo", async(req, res) => {
     try {
-        const prestamoo = await pool.query("SELECT * FROM prestamo where fecha_prestamo  = $2022-04-22", [req.params["fecha_prestamo"]]);
+        const prestamoo = await pool.query("SELECT * FROM prestamo where fecha_prestamo  = $1", [req.params["fecha_prestamo"]]);
         res.json(prestamoo.rows);
     } catch (err) {
         console.log(err.message);
@@ -185,6 +185,24 @@ app.get("/get_libros", async(req, res) => {
     try {
         const libros = await pool.query("SELECT * FROM libro");
         res.json(libros.rows);
+    } catch (err) {
+        console.log(err.message);
+    }
+});
+
+app.get("/get_areas", async(req, res) => {
+    try {
+        const areas = await pool.query("SELECT * FROM area");
+        res.json(areas.rows);
+    } catch (err) {
+        console.log(err.message);
+    }
+});
+
+app.get("/get_editoriales", async(req, res) => {
+    try {
+        const editoriales = await pool.query("SELECT * FROM editorial");
+        res.json(editoriales.rows);
     } catch (err) {
         console.log(err.message);
     }

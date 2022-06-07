@@ -20,6 +20,7 @@ const Header = () => {
                                     <li><Link className="dropdown-item" to="/estudiantes">Estudiantes</Link></li>
                                     <li><Link className="dropdown-item" to="/editoriales">Editoriales</Link></li>
                                     <li><Link className="dropdown-item" to="/prestamos">Prestamos</Link></li>
+                                    <li><Link className="dropdown-item" to="/libros">Libros</Link></li>
                                 </ul>
                             </li>
                         </ul>

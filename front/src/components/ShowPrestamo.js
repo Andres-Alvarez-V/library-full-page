@@ -51,7 +51,6 @@ const ShowPrestamo = () => {
                             <th>Multa</th>
                             <th>Fecha de pago</th>
                             <th>Valor multa</th>
-                            <th>Editar</th>
                             <th>Eliminar</th>
                             </tr>
                         </thead>
@@ -67,7 +66,6 @@ const ShowPrestamo = () => {
                                     <td>{prestamo.multa}</td>
                                     <td>{prestamo.fecha_pago}</td>
                                     <td>{prestamo.valor_multa}</td>
-                                    <th><button className='btn btn-warning'>Editar</button></th>
                                     <th><button className='btn btn-danger' 
                                     onClick={() => deletePrestamos(prestamo.id_lector)}>Eliminar</button></th>
                                 </tr>

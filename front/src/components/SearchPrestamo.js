@@ -28,7 +28,7 @@ const SearchPrestamo = () => {
         }
     };
     
-    const prestamo = newPrestamo["id_lector"];
+    const prestamo = newPrestamo["fecha_prestamo"];
     const handleChange = (key,e) => {
         let updateValue = {...newPrestamo};
         updateValue[key] = e.target.value;
@@ -81,15 +81,15 @@ const SearchPrestamo = () => {
                 <table className='table mt-2 text-center'>
                     <thead>
                         <tr>
-                            <th>Id lector</th>
-                            <th>Id libro</th>
+                            <th>Documento</th>
+                            <th>Nombre</th>
+                            <th>Titulo Libro</th>
                             <th>Fecha de prestamo</th>
                             <th>Fecha de devolucion</th>
                             <th>Devuelto</th>
                             <th>Multa</th>
                             <th>Fecha de pago</th>
                             <th>Valor multa</th>
-                            <th>Editar</th>
                             <th>Eliminar</th>
                         </tr>
                     </thead>
@@ -97,13 +97,13 @@ const SearchPrestamo = () => {
                             <tr key={prestamoo["id_lector"]}>
                                 <td>{prestamoo["id_lector"]}</td>
                                 <td>{prestamoo["id_libro"]}</td>
+                                <td>{prestamoo["titulo"]}</td>
                                 <td>{prestamoo["fecha_prestamo"]}</td>
                                 <td>{prestamoo["fecha_devolucion"]}</td>
                                 <td>{prestamoo["devuelto"]}</td>
                                 <td>{prestamoo["multa"]}</td>
                                 <td>{prestamoo["fecha_pago"]}</td>
                                 <td>{prestamoo["valor_multa"]}</td>
-                                <th><button className='btn btn-warning'>Editar</button></th>
                                 <th><button className='btn btn-danger' 
                                  onClick={() => deletePrestamo(prestamoo.prestamo)}>Eliminar</button></th>
                             </tr>
