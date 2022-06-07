@@ -9,6 +9,8 @@ app.use(express.json());
 //ROUTES//
 
 //Estudiante
+
+
 //create
 app.post("/new_student", async(req, res) => {
     try {
@@ -25,7 +27,8 @@ app.post("/new_student", async(req, res) => {
         console.log(err.message);
     }
 });
-//gets
+
+//mostrar estudiante
 app.get("/show_students/", async(req, res) => {
     try {
         const allStudents = await pool.query("SELECT estudiante.*,  carrera.nombre_programa FROM estudiante, carrera WHERE estudiante.carrera = carrera.carrera");
@@ -45,9 +48,6 @@ app.get("/show_student/:ci", async(req, res) => {
     }
 });
 
-//view a estudiantes 
-
-//updates
 
 //editar estudiante
 app.put("/update_student/:id_lector", async(req, res) => {
@@ -77,6 +77,8 @@ app.delete("/delete_student/:id_lector", async(req, res) => {
     }
 });
 
+//-------------------------------------------------------------------------------------
+
 //Editorial
 app.post("/new_editorial", async(req, res) => {
     try {
@@ -94,6 +96,7 @@ app.post("/new_editorial", async(req, res) => {
 });
 
 //gets
+
 app.get("/show_editorial/", async(req, res) => {
     try {
         const allEdits = await pool.query("SELECT * FROM editorial");
@@ -123,24 +126,28 @@ app.delete("/delete_editorial/:id_editorial", async(req, res) => {
     }
 });
 
+// ------------------------------------------------------------------------------------------------------------------------------------------------
+
 //Prestamo
+
 //create
 app.post("/new_prestamo", async(req, res) => {
     try {
         console.log(req.body)
-        const { id_lector, id_libro, fecha_prestamo, fecha_devolucion, devuelto, multa, fecha_pago, valor_multaa} = req.body.newInfo;
-        let valor_multa = parseInt(valor_multaa);
-        const newPrestamo = await pool.query("INSERT INTO prestamo (id_lector, id_libro, fecha_prestamo, fecha_devolucion, devuelto, multa, fecha_pago, valor_multa) VALUES($1, $2, $3, $4, $5, $6, $7, $8 ) RETURNING *", [id_lector, id_libro, fecha_prestamo, fecha_devolucion, devuelto, multa, fecha_pago, valor_multa]);
+        const { tipo_documento, numero_documento, id_libro, fecha_prestamo, fecha_devolucion} = req.body.newPrestamo;
+        let CI = tipo_documento + "-" + numero_documento;
+        const newPrestamo = await pool.query("INSERT INTO prestamo (id_lector, id_libro, fecha_prestamo, fecha_devolucion, multa, devuelto, valor_multa) VALUES((select id_lector from estudiante where ci = $1), $2, $3, $4, $5, $6, $7 ) RETURNING *", [CI, id_libro, fecha_prestamo, fecha_devolucion, '0', '0', 0]);
         res.json(newPrestamo);
     } catch (err) { 
         res.status(900).send("Hubo un error al ejecutar la peticion");
         console.log(err.message);
     }
 });
+
 //gets
 app.get("/show_prestamos/", async(req, res) => {
     try {
-        const allPrestamo = await pool.query("SELECT * FROM prestamo");
+        const allPrestamo = await pool.query("SELECT  est.ci, est.nombre, lb.titulo, pre.fecha_prestamo, pre.fecha_devolucion, pre.devuelto, pre.multa, pre.fecha_pago, pre.valor_multa FROM prestamo as pre, estudiante as est, libro as lb WHERE pre.id_lector = est.id_lector and lb.id_libro = pre.id_libro");
         res.json(allPrestamo.rows);
     } catch (err) {
         console.log(err.message);
@@ -157,17 +164,6 @@ app.get("/show_prestamo/:fecha_prestamo", async(req, res) => {
     }
 });
 
-//get a todo
-app.get("/todos/:id", async(req, res) => {
-    try {
-        const { id } =  req.params;
-        const allTodo = await pool.query("SELECT * FROM prestamo WHERE id = $1", [id]);
-        res.json(allTodo.rows);
-    } catch (err) {
-        console.log(err.message);
-    }
-});
-
 // delete
 app.delete("/delete_prestamo/:id_lector", async(req, res) => {
     try {
@@ -177,6 +173,23 @@ app.delete("/delete_prestamo/:id_lector", async(req, res) => {
         console.log(err.message);
     }
 });
+
+
+//-------------------------------------------
+
+//Libros
+
+//get libros
+
+app.get("/get_libros", async(req, res) => {
+    try {
+        const libros = await pool.query("SELECT * FROM libro");
+        res.json(libros.rows);
+    } catch (err) {
+        console.log(err.message);
+    }
+});
+
 
 
 app.listen(3000, () => {

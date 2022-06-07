@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 
 const ShowPrestamo = () => {
     const [prestamos, setPrestamos] = useState([]);
+
     const deletePrestamos = async id => {
         try{
             console.log(id);
@@ -14,6 +15,7 @@ const ShowPrestamo = () => {
             console.error(err.message);
         }
     };
+
     const getPrestamos = async () => {
         try {
             const response = await fetch("http://localhost:3000/show_prestamos");
@@ -24,6 +26,7 @@ const ShowPrestamo = () => {
             console.log(err.message);
         }
     };
+
     return (
         <>
             <div className='border-bottom border-1'>
@@ -39,8 +42,9 @@ const ShowPrestamo = () => {
                     <table className='table mt-2 text-center'>
                         <thead>
                             <tr>
-                            <th>Id lector</th>
-                            <th>Id libro</th>
+                            <th>Documento</th>
+                            <th>Nombre</th>
+                            <th>Titulo Libro</th>
                             <th>Fecha de prestamo</th>
                             <th>Fecha de devolucion</th>
                             <th>Devuelto</th>
@@ -52,19 +56,20 @@ const ShowPrestamo = () => {
                             </tr>
                         </thead>
                         <tbody>
-                            {prestamos.map(prestamoo => (
-                                <tr key={prestamoo.id_lector}>
-                                    <td>{prestamoo.id_lector}</td>
-                                    <td>{prestamoo.id_libro}</td>
-                                    <td>{prestamoo.fecha_prestamo}</td>
-                                    <td>{prestamoo.fecha_devolucion}</td>
-                                    <td>{prestamoo.devuelto}</td>
-                                    <td>{prestamoo.multa}</td>
-                                    <td>{prestamoo.fecha_pago}</td>
-                                    <td>{prestamoo.valor_multa}</td>
+                            {prestamos.map(prestamo => (
+                                <tr key={prestamo.id_lector}>
+                                    <td>{prestamo.ci}</td>
+                                    <td>{prestamo.nombre}</td>
+                                    <td>{prestamo.titulo}</td>
+                                    <td>{prestamo.fecha_prestamo}</td>
+                                    <td>{prestamo.fecha_devolucion}</td>
+                                    <td>{prestamo.devuelto}</td>
+                                    <td>{prestamo.multa}</td>
+                                    <td>{prestamo.fecha_pago}</td>
+                                    <td>{prestamo.valor_multa}</td>
                                     <th><button className='btn btn-warning'>Editar</button></th>
                                     <th><button className='btn btn-danger' 
-                                    onClick={() => deletePrestamos(prestamoo.id_lector)}>Eliminar</button></th>
+                                    onClick={() => deletePrestamos(prestamo.id_lector)}>Eliminar</button></th>
                                 </tr>
                             ))}
                         </tbody>

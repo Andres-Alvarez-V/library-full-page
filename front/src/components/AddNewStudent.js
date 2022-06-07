@@ -77,7 +77,7 @@ const AddNewStudent = () => {
 
     return (
         <div className='border-bottom border-1'>
-            <h6 className='mt-3'>Añadir nuevo estudiante: </h6>
+            <h6 className='mt-3 fw-bold'>Añadir nuevo estudiante: </h6>
             <form onSubmit={handleSubmit}>
                 <div class="row mb-3">
                     <div class="col-2">

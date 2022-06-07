@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 
 
@@ -6,16 +6,31 @@ const AddNewPrestamo= () => {
 
     const [errors, setErrors] = useState(undefined);
     const [fetchSuccess, setFetchSuccess] = useState(0);
+    const [libros, setLibros]  = useState([]);
+
+    const getLibros = async () => {
+        try {
+            
+            const response = await fetch("http://localhost:3000/get_libros")
+            const jsonData = await response.json();
+            setLibros(jsonData);
+
+        } catch (err) {
+            console.log(err.message);
+        }
+    }
+
+    useEffect(() => {
+        getLibros();
+    }, []);
+    
 
     const [newPrestamo, setNewPrestamo] = useState({
-        "id_lector" : "",   
+        "tipo_documento" : "",
+        "numero_documento" : "",
         "id_libro": "",
         "fecha_prestamo" : "",
-        "fecha_devolucion" : "",
-        "devuelto": "",
-        "multa": "",
-        "fecha_pago" : "",
-        "valor_multa": ""
+        "fecha_devolucion" : ""
     });
 
     const checkValues = () => {
@@ -26,17 +41,17 @@ const AddNewPrestamo= () => {
         return err;
     }
 
-    console.log(newPrestamo);    
 
     const handleChange = (key,e) => {
         let updateValue = {...newPrestamo};
         updateValue[key] = e.target.value;
         setNewPrestamo(updateValue);
-     }
+        console.log(newPrestamo)
+    }
 
-     const handleSubmit = async (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        const errorAux = checkValues();
+        const errorAux = checkValues(); //falta terminar lo de checkValues
         setErrors(errorAux);
 
         if (errorAux.size === 0) {
@@ -70,45 +85,40 @@ const AddNewPrestamo= () => {
 
     return (
         <div className='border-bottom border-1'>
-            <h6 className='mt-3'>Añadir prestamo: </h6>
+            <h6 className='mt-3 fw-bold'>Añadir prestamo: </h6>
             <form onSubmit={handleSubmit}>
-                <div class="row mb-3">
+                <div class="row mb-3 d-flex align-items-end">
                     <div class="col-3">
-                        <input type="text" class="form-control" placeholder="Id del lector" aria-label="id_lector" onChange={(e) => handleChange('id_lector', e)}/>
-                        {errors && errors.get('id_lector') && <p className="settings-error-validate-message">{errors.get('id_lector')} Intenta de nuevo</p>}
+                        <select class="form-select" aria-label="Default select example" onChange={(e) => handleChange('tipo_documento', e)}>
+                            <option selected disabled>Tipo de documento</option>
+                            <option value="CC">CC</option>
+                            <option value="TI">TI</option>
+                            <option value="CE">CE</option>
+                        </select>
                     </div>
                     <div class="col-3">
-                        <input type="text" class="form-control" placeholder="Id del libro" aria-label="id_libro" onChange={(e) => handleChange('id_libro', e)}/>
+                        <input type="text" class="form-control" placeholder="Num Documento" aria-label="Num Documento" onChange={(e) => handleChange('numero_documento', e)}/>
+                        {errors && errors.get('numero_documento') && <p className="settings-error-validate-message">{errors.get('numero_documento')} Intenta de nuevo</p>}
+                    </div>
+                    <div class="col-3">
+                        <select class="form-select" aria-label="Default select example" onChange={(e) => handleChange('id_libro', e)}>
+                            <option disabled selected>Seleccione un libro</option>
+                            {libros.map(libro => (
+                                <option key={libro.id_libro} value = {libro.id_libro}>{libro.titulo}</option>
+                            ))}
+                        </select>
                         {errors && errors.get('id_libro') && <p className="settings-error-validate-message">{errors.get('id_libro')} Intenta de nuevo</p>}
                     </div>
+                </div>
+                <div className='row mb-3 d-flex align-items-end'>
                     <div class="col-2">
+                        <p className='mb-1'>Fecha del prestamo: </p>
                         <input type="date" class="form-control" placeholder="Fecha de prestamo" aria-label="fecha_prestamo" onChange={(e) => handleChange('fecha_prestamo', e)}/>
                     </div>
                     <div class="col-2">
+                        <p className='mb-1'>Fecha de devolución: </p>
                         <input type="date" class="form-control" placeholder="Fecha de devolución" aria-label="fecha_devolucion" onChange={(e) => handleChange('fecha_devolucion', e)}/>
                     </div>                    
-                </div>
-                <div className='row mb-3'>
-                    <div className='col-1'>
-                        <select class="form-select" aria-label="Default select example" onChange={(e) => handleChange('devuelto', e)}>
-                                <option value="1" selected>Si</option>
-                                <option value="0" >No</option>
-                        </select>
-                    </div>
-                    <div className='col-1'>
-                        <select class="form-select" aria-label="Default select example" onChange={(e) => handleChange('multa', e)}>
-                                <option value="1" selected>Si</option>
-                                <option value="0" >No</option>
-                        </select>
-                    </div>
-                    <div class="col-2">
-                        <input type="date" class="form-control" placeholder="Fecha de pago" aria-label="fecha_pago" onChange={(e) => handleChange('fecha_pago', e)}/>
-                        {errors && errors.get('fecha_pago') && <p className="settings-error-validate-message">{errors.get('fecha_pago')} Intenta de nuevo</p>}
-                    </div>
-                    <div class="col-2">
-                        <input type="text" class="form-control" placeholder="Valor multa" aria-label="valor_multa" onChange={(e) => handleChange('valor_multa', e)}/>
-                        {errors && errors.get('valor_multa') && <p className="settings-error-validate-message">{errors.get('valor_multa')} Intenta de nuevo</p>}
-                    </div>
                     <div class="col-2">
                         <button type="submit" class="btn btn-outline-primary">Añadir</button>
                     </div>

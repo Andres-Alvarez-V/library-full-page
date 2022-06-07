@@ -41,7 +41,6 @@ const EditStudent = ({ infoStudent }) => {
     }
 
     const closeModal = async (e) => {
-        console.log("qhubo so")
         setNewInfo({
             "tipo_documento" : infoStudent.ci.substring(0, 2),
             "numero_documento" : infoStudent.ci.substring(3),

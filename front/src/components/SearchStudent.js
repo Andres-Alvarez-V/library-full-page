@@ -64,7 +64,7 @@ const SearchStudent = () => {
         <>
             <h2 className='text-center'>Estudiantes</h2>
             <div className='border-bottom border-1'>
-                <h6>Buscar estudiante: </h6>
+                <h6 className=' fw-bold '>Buscar estudiante: </h6>
                 <form onSubmit={handleSubmit}>
                     <div class="row mb-3">
                         <div class="col-2">
