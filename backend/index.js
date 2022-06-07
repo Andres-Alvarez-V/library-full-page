@@ -106,7 +106,7 @@ app.get("/show_editorial/", async(req, res) => {
 //Buscar editorial
 app.get("/show_editorial/:id_editorial", async(req, res) => {
     try {
-        const edit = await pool.query("SELECT * FROM editorial where id_editorial = $1", [req.params["id_editorial"]]);
+        const edit = await pool.query("select * from editorial where nombre_editorial  = ? ", [req.params["nombre_editorial"]]);
         res.json(edit.rows);
     } catch (err) {
         console.log(err.message);

@@ -5,7 +5,6 @@ const Header = () => {
 
     return(
         <>
-
         <nav className="navbar navbar-expand-lg navbar-light bg-dark">
                 <div className="container-fluid">
                     <div className="collapse navbar-collapse" id="navbarSupportedContent">
@@ -28,12 +27,6 @@ const Header = () => {
                 </div>
             </nav>
 
-        <div class="p-4 p-md-5 mb-4 text-white bg-dark" id="hola">
-            <div class="col-md-6 px-0">
-            <h1 class="display-4 fst-italic">Biblioteca EAFIT</h1>
-            <p class="lead my-3">Este sistema permite realizar prestamo de libros a estudiantes de la universidad EAFIT</p>
-            </div>
-        </div>
 
         </>
         
