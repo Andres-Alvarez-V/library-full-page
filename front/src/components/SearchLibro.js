@@ -2,15 +2,13 @@ import React, { useState } from 'react';
 
 
 const SearchLibro = () => {
-    const [libroo, setLibro] = useState([]);
-    const [newLibro, setNewLibro] = useState({
-        "titulo" : ""
-    });
+    const [libros, setLibros] = useState([]);
+    const [newLibro, setNewLibro] = useState("");
 
     const [errors, setErrors] = useState(undefined);
     const checkValues = () => {
         const err = new Map();
-        if (newLibro["titulo"] === "") {
+        if (newLibro === "") {
             err.set('titulo', 'Titulo no puede estar vacio.');
         }
         return err;
@@ -22,32 +20,26 @@ const SearchLibro = () => {
             const deleteLibros = await fetch(`http://localhost:3000/delete_libro/${id}`, {
                 method: 'DELETE'
             });
-            setLibro({});
+            setLibros(libros.filter(libro => libro.id_libro !== id));
         } catch(err){
             console.error(err.message);
         }
     };
-    
-    const libro = newLibro["titulo"];
-    const handleChange = (key,e) => {
-        let updateValue = {...newLibro};
-        updateValue[key] = e.target.value;
-        setNewLibro(updateValue);
-     }
 
-        const handleSubmit = async (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
         const errorAux = checkValues();
         setErrors(errorAux);
 
 
         if (errorAux.size === 0) {
-            try {
-                const showLibro = await fetch(`http://localhost:3000/show_libro/${libro}`, {
+            try {   
+                console.log(newLibro)
+                const showLibro = await fetch(`http://localhost:3000/show_libro/${newLibro}`, {
                     method: 'GET'
                 });
                 const jsonData = await showLibro.json();
-                setLibro(jsonData[0]);
+                setLibros(jsonData);
             } catch (err) {
                 console.log(err.message);
             }
@@ -59,6 +51,8 @@ const SearchLibro = () => {
         }
     }
 
+    console.log(newLibro)
+
     return (
         <>
             <h2 className='text-center'>Libros</h2>
@@ -67,7 +61,7 @@ const SearchLibro = () => {
                 <form onSubmit={handleSubmit}>
                     <div class="row mb-3">
                     <div class="col-3">
-                            <input type="text" class="form-control" placeholder="Titulo" aria-label="titulo" onChange={(e) => handleChange('titulo', e)}/>
+                            <input type="text" class="form-control" placeholder="Titulo" aria-label="titulo" onChange={(e) => setNewLibro(e.target.value) }/>
                         </div>
                         <div class="col-2">
                             <button type="submit" class="btn btn-outline-primary">Buscar</button>
@@ -76,7 +70,7 @@ const SearchLibro = () => {
                 </form>
             </div>
             {
-                libro.length !== 0 && 
+                libros.length !== 0 && 
                 <div>
                 <table className='table mt-2 text-center'>
                     <thead>
@@ -90,15 +84,19 @@ const SearchLibro = () => {
                         </tr>
                     </thead>
                     <tbody>
-                            <tr key={libroo["id_libro"]}>
-                                <td>{libroo["titulo"]}</td>
-                                <td>{libroo["nombre_editorial"]}</td>
-                                <td>{libroo["descripcion_area"]}</td>
-                                <th><button className='btn btn-warning' 
-                                onClick={() => deleteLibros(libroo.id_libro)}>Editar</button></th>
-                                <th><button className='btn btn-danger' 
-                                 onClick={() => deleteLibros(libroo.id_libro)}>Eliminar</button></th>
-                            </tr>
+                            {libros.map(libro => (
+                                <tr key={libro.id_lector}>
+                                    <td>{libro.ci}</td>
+                                    <td>{libro.nombre}</td>
+                                    <td>{libro.direccion}</td>
+                                    <td>{libro.nombre_programa}</td>
+                                    <td>{libro.edad}</td>
+                                    <th><button className='btn btn-warning' 
+                                        onClick={() => deleteLibros(libro.id_libro)}>Editar</button></th>
+                                    <th><button className='btn btn-danger' 
+                                        onClick={() => deleteLibros(libro.id_libro)}>Eliminar</button></th>
+                                    </tr>
+                            ))}
                     </tbody>
                 </table>
             </div>

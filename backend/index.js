@@ -25,7 +25,7 @@ app.post("/new_student", async(req, res) => {
     }
 });
 
-//mostrar estudiante
+//mostrar estudiantes
 app.get("/show_students/", async(req, res) => {
     try {
         const allStudents = await pool.query("SELECT estudiante.*,  carrera.nombre_programa FROM estudiante, carrera WHERE estudiante.carrera = carrera.carrera");
@@ -38,8 +38,10 @@ app.get("/show_students/", async(req, res) => {
 //Buscar estudiante
 app.get("/show_student/:ci", async(req, res) => {
     try {
-        const student = await pool.query("SELECT estudiante.*,  carrera.nombre_programa FROM estudiante, carrera WHERE estudiante.carrera = carrera.carrera");
+        const { ci } = req.params;
+        const student = await pool.query("SELECT estudiante.*,  carrera.nombre_programa FROM estudiante, carrera WHERE estudiante.carrera = carrera.carrera and estudiante.ci = $1", [ci]);
         res.json(student.rows);
+        console.log(student.rows)
     } catch (err) {
         console.log(err.message);
     }
@@ -301,7 +303,11 @@ app.get("/show_libros/", async(req, res) => {
 //Buscar libro
 app.get("/show_libro/:titulo", async(req, res) => {
     try {
-        const lib = await pool.query("SELECT libro.*,  editorial.nombre_editorial, area.descripcion_area FROM libro, editorial, area WHERE libro.id_editorial = editorial.id_editorial and libro.id_area = area.id_area");
+        
+        const { titulo } = req.params;
+        let tit = '%' + titulo + '%';
+        const lib = await pool.query("SELECT libro.*,  editorial.nombre_editorial, area.descripcion_area FROM libro, editorial, area WHERE libro.id_editorial = editorial.id_editorial and libro.id_area = area.id_area and libro.titulo like $1", [tit] );
+        console.log(lib.rows)
         res.json(lib.rows);
     } catch (err) {
         console.log(err.message);

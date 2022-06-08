@@ -3,7 +3,7 @@ import EditStudent from './EditStudent';
 
 
 const SearchStudent = () => {
-    const [student, setStudent] = useState([]);
+    const [students, setStudents] = useState([]);
     const [newInfo, setNewInfo] = useState({
         "tipo_documento" : "CC",
         "numero_documento" : ""
@@ -24,20 +24,20 @@ const SearchStudent = () => {
             const deleteStudents = await fetch(`http://localhost:3000/delete_student/${id}`, {
                 method: 'DELETE'
             });
-            setStudent({});
+            setStudents(students.filter(estudiante => estudiante.id_lector !== id));
         } catch(err){
             console.error(err.message);
         }
     };
     
-    const ci = newInfo["tipo_documento"]+"-"+newInfo["numero_documento"];
+    
     const handleChange = (key,e) => {
         let updateValue = {...newInfo};
         updateValue[key] = e.target.value;
         setNewInfo(updateValue);
-     }
+    }
 
-        const handleSubmit = async (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
         const errorAux = checkValues();
         setErrors(errorAux);
@@ -45,11 +45,13 @@ const SearchStudent = () => {
 
         if (errorAux.size === 0) {
             try {
+                const ci = newInfo["tipo_documento"]+"-"+newInfo["numero_documento"];
+                console.log(ci);
                 const showStudents = await fetch(`http://localhost:3000/show_student/${ci}`, {
                     method: 'GET'
                 });
                 const jsonData = await showStudents.json();
-                setStudent(jsonData[0]);
+                setStudents(jsonData);
             } catch (err) {
                 console.log(err.message);
             }
@@ -85,34 +87,36 @@ const SearchStudent = () => {
                 </form>
             </div>
             {
-                student.length !== 0 && 
+                students.length !== 0 && 
                 <div>
-                <table className='table mt-2 text-center'>
-                    <thead>
-                        <tr>
-                            <th>CI</th>
-                            <th>Nombre</th>
-                            <th>Direccion</th>
-                            <th>Carrera</th>
-                            <th>Edad</th>
-                            <th>Editar</th>
-                            <th>Eliminar</th>
+                    <table className='table mt-2 text-center'>
+                        <thead>
+                            <tr>
+                                <th>CI</th>
+                                <th>Nombre</th>
+                                <th>Direccion</th>
+                                <th>Carrera</th>
+                                <th>Edad</th>
+                                <th>Editar</th>
+                                <th>Eliminar</th>
 
-                        </tr>
-                    </thead>
-                    <tbody>
-                            <tr key={student["id_lector"]}>
-                                <td>{student["ci"]}</td>
-                                <td>{student["nombre"]}</td>
-                                <td>{student["direccion"]}</td>
-                                <td>{student["nombre_programa"]}</td>
-                                <td>{student["edad"]}</td>
-                                <th><EditStudent infoStudent = {student} /></th>
-                                <th><button className='btn btn-danger' 
-                                 onClick={() => deleteStudents(student.id_lector)}>Eliminar</button></th>
                             </tr>
-                    </tbody>
-                </table>
+                        </thead>
+                        <tbody>
+                                {students.map(student => (
+                                    <tr key={student.id_lector}>
+                                        <td>{student.ci}</td>
+                                        <td>{student.nombre}</td>
+                                        <td>{student.direccion}</td>
+                                        <td>{student.nombre_programa}</td>
+                                        <td>{student.edad}</td>
+                                        <th><EditStudent infoStudent = {student} /></th>
+                                        <th><button className='btn btn-danger' 
+                                        onClick={() => deleteStudents(student.id_lector)}>Eliminar</button></th>
+                                    </tr>
+                                ))}
+                        </tbody>
+                    </table>
             </div>
             }
         </>
