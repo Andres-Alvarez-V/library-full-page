@@ -27,8 +27,19 @@ const Header = () => {
                     </div>
                 </div>
             </nav>
-<br></br>
-
+            
+        <div class="card card-image">
+            <div class="text-white text-center rgba-stylish-strong py-5 px-4">
+            <div class="py-5">
+                <h1 class="card-title h1 my-4 py-2">Biblioteca EAFIT</h1>
+                <p class="mb-4 pb-2 px-md-5 mx-md-5">Bienvenidos al sistema de Préstamo de libros de la Biblioteca - Universidad EAFIT. 
+                En esta página podrás realizar el registro de estudiantes, libros, editoriales y por supuesto inscribir los préstamos 
+                realizados por los estudiantes, además de esto podrás verificar cuáles de ellos tienen multas (multas pagas - multas pendientes) 
+                y cuáles han realizado la respectiva devolución, te invitamos a explorar lo que tenemos para ofrecerte.</p>
+            </div>
+            </div>
+        </div>
+        <br></br>
         </>
         
     );

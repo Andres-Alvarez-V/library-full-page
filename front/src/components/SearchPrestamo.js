@@ -4,14 +4,14 @@ import React, { useState } from 'react';
 const SearchPrestamo = () => {
     const [prestamoo, setPrestamo] = useState([]);
     const [newPrestamo, setNewPrestamo] = useState({
-        "fecha_prestamo" : ""
+        "titulo" : ""
     });
 
     const [errors, setErrors] = useState(undefined);
     const checkValues = () => {
         const err = new Map();
-        if (newPrestamo["fecha_prestamo"] === "") {
-            err.set('fecha_prestamo', 'La fecha de prestamo no puede estar vacia.');
+        if (newPrestamo["titulo"] === "") {
+            err.set('titulo', 'titulo no puede estar vacio.');
         }
         return err;
     }
@@ -28,7 +28,7 @@ const SearchPrestamo = () => {
         }
     };
     
-    const prestamo = newPrestamo["fecha_prestamo"];
+    const libro = newPrestamo["titulo"];
     const handleChange = (key,e) => {
         let updateValue = {...newPrestamo};
         updateValue[key] = e.target.value;
@@ -43,7 +43,7 @@ const SearchPrestamo = () => {
 
         if (errorAux.size === 0) {
             try {
-                const showPrestamo = await fetch(`http://localhost:3000/show_prestamo/${prestamo}`, {
+                const showPrestamo = await fetch(`http://localhost:3000/show_prestamo/${libro}`, {
                     method: 'GET'
                 });
                 const jsonData = await showPrestamo.json();
@@ -67,7 +67,7 @@ const SearchPrestamo = () => {
                 <form onSubmit={handleSubmit}>
                     <div class="row mb-3">
                         <div class="col-3">
-                            <input type="date" class="form-control" placeholder="Fecha del prestamo" aria-label="fecha_prestamo" onChange={(e) => handleChange('fecha_prestamo', e)}/>
+                            <input type="text" class="form-control" placeholder="Titulo" aria-label="titulo" onChange={(e) => handleChange('titulo', e)}/>
                         </div>
                         <div class="col-2">
                             <button type="submit" class="btn btn-outline-primary">Buscar</button>
@@ -86,24 +86,16 @@ const SearchPrestamo = () => {
                             <th>Titulo Libro</th>
                             <th>Fecha de prestamo</th>
                             <th>Fecha de devolucion</th>
-                            <th>Devuelto</th>
-                            <th>Multa</th>
-                            <th>Fecha de pago</th>
-                            <th>Valor multa</th>
                             <th>Eliminar</th>
                         </tr>
                     </thead>
                     <tbody>
                             <tr key={prestamoo["id_lector"]}>
-                                <td>{prestamoo["id_lector"]}</td>
-                                <td>{prestamoo["id_libro"]}</td>
+                                <td>{prestamoo["ci"]}</td>
+                                <td>{prestamoo["nombre"]}</td>
                                 <td>{prestamoo["titulo"]}</td>
                                 <td>{prestamoo["fecha_prestamo"]}</td>
                                 <td>{prestamoo["fecha_devolucion"]}</td>
-                                <td>{prestamoo["devuelto"]}</td>
-                                <td>{prestamoo["multa"]}</td>
-                                <td>{prestamoo["fecha_pago"]}</td>
-                                <td>{prestamoo["valor_multa"]}</td>
                                 <th><button className='btn btn-danger' 
                                  onClick={() => deletePrestamo(prestamoo.prestamo)}>Eliminar</button></th>
                             </tr>

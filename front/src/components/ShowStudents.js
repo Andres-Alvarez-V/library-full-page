@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import EditStudent from './EditStudent';
+import EditStudent from './EditStudent'; 
 
 
 const ShowStudents = () => {

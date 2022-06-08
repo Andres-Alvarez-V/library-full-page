@@ -38,7 +38,7 @@ app.get("/show_students/", async(req, res) => {
 //Buscar estudiante
 app.get("/show_student/:ci", async(req, res) => {
     try {
-        const student = await pool.query("SELECT * FROM estudiante where ci  = $1", [req.params["ci"]]);
+        const student = await pool.query("SELECT estudiante.*,  carrera.nombre_programa FROM estudiante, carrera WHERE estudiante.carrera = carrera.carrera");
         res.json(student.rows);
     } catch (err) {
         console.log(err.message);
@@ -119,6 +119,20 @@ app.delete("/delete_editorial/:id_editorial", async(req, res) => {
     }
 });
 
+//editar editorial
+app.put("/update_editorial/:id_editorial", async(req, res) => {
+    try {
+        const { id_editorial } =  req.params;
+        console.log(req.body)
+        const { nombre_editorial, telefono} = req.body.newEdit;
+        let tele = parseInt(telefono);
+        const updateEditorial = await pool.query("UPDATE editorial SET nombre_editorial = $1, telefono = $2 WHERE id_editorial = $3", [nombre_editorial, tele, id_editorial]);
+        res.json("Update complete");
+    } catch (err) {
+        console.log(err.message);
+    }
+});
+
 app.get("/get_editoriales", async(req, res) => {
     try {
         const editoriales = await pool.query("SELECT * FROM editorial");
@@ -164,10 +178,28 @@ app.get("/show_prestamos_multados", async(req, res) => {
     }
 });
 
-//Buscar prestamo
-app.get("/show_prestamo/:fecha_prestamo", async(req, res) => {
+app.get("/show_prestamos_pagados", async(req, res) => {
     try {
-        const prestamoo = await pool.query("SELECT * FROM prestamo where fecha_prestamo  = $1", [req.params["fecha_prestamo"]]);
+        const allPrestamo = await pool.query("SELECT  est.ci, est.nombre, lb.titulo, pre.* FROM prestamo as pre, estudiante as est, libro as lb WHERE pre.id_lector = est.id_lector and lb.id_libro = pre.id_libro and pre.devuelto = '1' and pre.multa = '1'");
+        res.json(allPrestamo.rows);
+    } catch (err) {
+        console.log(err.message);
+    }
+});
+
+app.get("/show_prestamos_devueltos", async(req, res) => {
+    try {
+        const allPrestamo = await pool.query("SELECT  est.ci, est.nombre, lb.titulo, pre.* FROM prestamo as pre, estudiante as est, libro as lb WHERE pre.id_lector = est.id_lector and lb.id_libro = pre.id_libro and pre.devuelto = '1' and pre.multa = '0'");
+        res.json(allPrestamo.rows);
+    } catch (err) {
+        console.log(err.message);
+    }
+});
+
+//Buscar prestamo
+app.get("/show_prestamo/:titulo", async(req, res) => {
+    try {
+        const prestamoo = await pool.query("SELECT prestamo.*,  libro.titulo, estudiante.ci, estudiante.nombre FROM prestamo, libro, estudiante WHERE prestamo.id_libro = libro.id_libro and prestamo.id_lector = estudiante.id_lector");
         res.json(prestamoo.rows);
     } catch (err) {
         console.log(err.message);
@@ -201,12 +233,27 @@ app.put("/multar_prestamo/:id_lector/:id_libro/:fecha_prestamo", async(req, res)
     }
 });
 
+//devolver prestamo
+app.put("/devolver_prestamo/:id_lector/:id_libro/:fecha_prestamo", async(req, res) => {
+    try {
+        const { id_lector, id_libro, fecha_prestamo } = req.params;
+        console.log(req.params)
+        console.log(id_lector)
+        console.log(id_libro)
+        console.log(fecha_prestamo)
+        const multarPrestamo = await pool.query("UPDATE prestamo SET devuelto = '1' WHERE id_lector = $1 and id_libro = $2 and fecha_prestamo = $3", [id_lector, id_libro, fecha_prestamo]);
+        res.json("Se ha devuelto correctamente");
+    } catch (err) {
+        console.log(err.message)
+    }
+});
+
 //pagar multa
 app.put("/pagar_multa", async (req, res) => {
     try {
         console.log(req.body)
-        const { id_lector, id_libro, fecha_prestamo, valor_multa } = req.body.newValue
-        const pagarMulta = await pool.query("UPDATE prestamo SET devuelto = '1', valor_multa = $1 WHERE id_lector = $2 and id_libro = $3 and fecha_prestamo = $4", [valor_multa, id_lector, id_libro, fecha_prestamo]);
+        const { id_lector, id_libro, fecha_prestamo, fecha_pago, valor_multa } = req.body.newValue
+        const pagarMulta = await pool.query("UPDATE prestamo SET devuelto = '1', valor_multa = $1, fecha_pago = $2 WHERE id_lector = $3 and id_libro = $4 and fecha_prestamo = $5", [valor_multa, fecha_pago, id_lector, id_libro, fecha_prestamo]);
         res.json("Se ha pagado correctamente la multa");
     } catch (err) {
         console.log(err.message)
@@ -244,7 +291,7 @@ app.post("/new_libro", async(req, res) => {
 //get
 app.get("/show_libros/", async(req, res) => {
     try {
-        const allLibros = await pool.query("SELECT * FROM libro");
+        const allLibros = await pool.query("SELECT libro.*,  editorial.nombre_editorial, area.descripcion_area FROM libro, editorial, area WHERE libro.id_editorial = editorial.id_editorial and libro.id_area = area.id_area");
         res.json(allLibros.rows);
     } catch (err) {
         console.log(err.message);
@@ -254,7 +301,7 @@ app.get("/show_libros/", async(req, res) => {
 //Buscar libro
 app.get("/show_libro/:titulo", async(req, res) => {
     try {
-        const lib = await pool.query("select * from libro where titulo  = $1", [req.params["titulo"]]);
+        const lib = await pool.query("SELECT libro.*,  editorial.nombre_editorial, area.descripcion_area FROM libro, editorial, area WHERE libro.id_editorial = editorial.id_editorial and libro.id_area = area.id_area");
         res.json(lib.rows);
     } catch (err) {
         console.log(err.message);
@@ -278,6 +325,16 @@ app.get("/get_areas", async(req, res) => {
     try {
         const areas = await pool.query("SELECT * FROM area");
         res.json(areas.rows);
+    } catch (err) {
+        console.log(err.message);
+    }
+});
+
+//------Multas
+app.get("/total_multas", async(req, res) => {
+    try {
+        const multas = await pool.query("select count(multa) from prestamo where multa = true;");
+        res.json(multas.rows);
     } catch (err) {
         console.log(err.message);
     }

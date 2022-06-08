@@ -52,8 +52,8 @@ const ShowLibro = () => {
                             {libros.map(libro => (
                                 <tr key={libro.id_libro}>
                                     <td>{libro.titulo}</td>
-                                    <td>{libro.id_editorial}</td>
-                                    <td>{libro.id_area}</td>
+                                    <td>{libro.nombre_editorial}</td>
+                                    <td>{libro.descripcion_area}</td>
                                     <th><button className='btn btn-danger' 
                                     onClick={() => deleteLibros(libro.id_libro)}>Eliminar</button></th>
                                 </tr>

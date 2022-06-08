@@ -9,11 +9,11 @@ const PayFine = ({ infoPrestamo, getPrestamosMultados }) => {
         getPrestamosMultados();
     }
 
-
-    const handleChange = (e) => {
+    const handleChange = (key,e) => {
         let updateValue = {...newValue};
-        updateValue["valor_multa"] = e.target.value;
+        updateValue[key] = e.target.value;
         setNewValue(updateValue);
+        console.log(newValue)
     }
 
      const updateFineValue = async (e) => {
@@ -38,6 +38,7 @@ const PayFine = ({ infoPrestamo, getPrestamosMultados }) => {
     }
 
 
+    
     return (
         <>
             <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target= {`#idP${infoPrestamo.id_lector}${infoPrestamo.id_libro}`}>
@@ -54,7 +55,8 @@ const PayFine = ({ infoPrestamo, getPrestamosMultados }) => {
 
 
                         <div class="modal-body">
-                            <input type="text" class="form-control" placeholder="Valor de multa" aria-label="Valor de multa" onChange={(e) => handleChange(e)}/>
+                            <input type="text" class="form-control" placeholder="Valor de multa" aria-label="Valor de multa" onChange={(e) => handleChange('valor_multa', e)}/> <br></br>
+                            <input type="date" class="form-control" placeholder="Fecha de Pago" aria-label="Fecha de Pago" onChange={(e) => handleChange('fecha_pago', e)}/>
                         </div>
 
 

@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import EditEditorial from './EditEditorial';
 
 
 const ShowEditorial = () => {
@@ -50,7 +51,7 @@ const ShowEditorial = () => {
                                 <tr key={edit.id_editorial}>
                                     <td>{edit.nombre_editorial}</td>
                                     <td>{edit.telefono}</td>
-                                    <th><button className='btn btn-warning'>Editar</button></th>
+                                    <th><EditEditorial infoEditorial = {edit} /></th>
                                     <th><button className='btn btn-danger' 
                                     onClick={() => deleteEditorial(edit.id_editorial)}>Eliminar</button></th>
                                 </tr>

@@ -92,8 +92,8 @@ const SearchLibro = () => {
                     <tbody>
                             <tr key={libroo["id_libro"]}>
                                 <td>{libroo["titulo"]}</td>
-                                <td>{libroo["id_editorial"]}</td>
-                                <td>{libroo["id_area"]}</td>
+                                <td>{libroo["nombre_editorial"]}</td>
+                                <td>{libroo["descripcion_area"]}</td>
                                 <th><button className='btn btn-warning' 
                                 onClick={() => deleteLibros(libroo.id_libro)}>Editar</button></th>
                                 <th><button className='btn btn-danger' 
