@@ -3,6 +3,10 @@ import React, { useState } from 'react';
 
 const ShowLibro = () => {
     const [libros, setLibros] = useState([]);
+    const [totalMulta, setTotalMulta] = useState({
+        "multa" : ""
+    });
+
 
     const deleteLibros = async id => {
         try{
@@ -27,13 +31,28 @@ const ShowLibro = () => {
         }
     };
 
+    const getMultas = async () => {
+        try {
+            const response = await fetch("http://localhost:3000/total_multas");
+            const jsonData = await response.json();
+            setTotalMulta(jsonData);
+            console.log(jsonData);
+        } catch (err) {
+            console.log(err.message);
+        }
+    };
+
+    const closeModal = async (e) => {}
+
+
     return (
         <>
             <div className='border-bottom border-1'>
                 <div className='d-flex justify-content-center'>
                     <button type="button" class="btn btn-outline-info my-3 me-3" onClick={getLibros}>Mostrar libros</button>
+                    <button type="button" class="btn btn-outline-info my-3 me-3" onClick={getMultas}>Mostrar total de multas</button>                   
                     {libros.length !== 0 && 
-                        <button type="button" class="btn btn-outline-danger my-3 mr-3" onClick={(e) => setLibros([])}>Ocultar libros</button>
+                    <button type="button" class="btn btn-outline-danger my-3 mr-3" onClick={(e) => setLibros([])}>Ocultar libros</button>
                     }
                 </div>
             </div>
@@ -61,6 +80,30 @@ const ShowLibro = () => {
                         </tbody>
                     </table>
                 </div>
+            }
+
+            {totalMulta.length !== 0 && 
+            <div class="modal fade" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-personalize ">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Total de multas:</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" onClick={() => closeModal()}></button>
+                    </div>
+                    <div class="modal-body"> 
+                            </div>
+                            <div className='row mb-3'>
+                                <div class="col-3">
+                                <textarea>{getMultas}</textarea>
+                                </div>
+                            </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-danger" data-bs-dismiss="modal" onClick={() => closeModal()}>Cerrar</button>
+                    </div>
+
+                </div>
+            </div>
             }
         </>
     );
