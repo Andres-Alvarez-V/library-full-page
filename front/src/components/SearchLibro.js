@@ -4,9 +4,7 @@ import React, { useState } from 'react';
 const SearchLibro = () => {
     const [libroo, setLibro] = useState([]);
     const [newLibro, setNewLibro] = useState({
-        "titulo" : "",
-        "id_editorial" : "",
-        "id_area" : ""
+        "titulo" : ""
     });
 
     const [errors, setErrors] = useState(undefined);
@@ -21,7 +19,7 @@ const SearchLibro = () => {
     const deleteLibros = async id => {
         try{
             console.log(id);
-            const deleteStudents = await fetch(`http://localhost:3000/delete_libro/${id}`, {
+            const deleteLibros = await fetch(`http://localhost:3000/delete_libro/${id}`, {
                 method: 'DELETE'
             });
             setLibro({});
@@ -92,14 +90,14 @@ const SearchLibro = () => {
                         </tr>
                     </thead>
                     <tbody>
-                            <tr key={libro["id_libro"]}>
-                                <td>{libro["titulo"]}</td>
-                                <td>{libro["id_editorial"]}</td>
-                                <td>{libro["id_area"]}</td>
+                            <tr key={libroo["id_libro"]}>
+                                <td>{libroo["titulo"]}</td>
+                                <td>{libroo["id_editorial"]}</td>
+                                <td>{libroo["id_area"]}</td>
                                 <th><button className='btn btn-warning' 
-                                onClick={() => deleteLibros(libro.id_libro)}>Editar</button></th>
+                                onClick={() => deleteLibros(libroo.id_libro)}>Editar</button></th>
                                 <th><button className='btn btn-danger' 
-                                 onClick={() => deleteLibros(libro.id_libro)}>Eliminar</button></th>
+                                 onClick={() => deleteLibros(libroo.id_libro)}>Eliminar</button></th>
                             </tr>
                     </tbody>
                 </table>

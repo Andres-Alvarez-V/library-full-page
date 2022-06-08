@@ -23,9 +23,9 @@ const AddNewLibro= () => {
     const getAreas = async () => {
         try {
             
-            const response = await fetch("http://localhost:3000/get_libros")
+            const response = await fetch("http://localhost:3000/get_areas")
             const jsonData = await response.json();
-            setLibros(jsonData);
+            setAreas(jsonData);
 
         } catch (err) {
             console.log(err.message);
@@ -35,9 +35,9 @@ const AddNewLibro= () => {
     const getEditoriales = async () => {
         try {
             
-            const response = await fetch("http://localhost:3000/get_libros")
+            const response = await fetch("http://localhost:3000/get_editoriales")
             const jsonData = await response.json();
-            setLibros(jsonData);
+            setEditoriales(jsonData);
 
         } catch (err) {
             console.log(err.message);
@@ -52,16 +52,15 @@ const AddNewLibro= () => {
     
 
     const [newLibro, setNewLibro] = useState({
-        "id_libro" : "",
         "titulo" : "",
-        "editorial": "",
-        "area" : ""
+        "id_editorial": "",
+        "id_area" : ""
     });
 
     const checkValues = () => {
         const err = new Map();
-        if (newLibro["id_libro"] === "") {
-            err.set('id_libro', 'Id no puede estar vacio.');
+        if (newLibro["titulo"] === "") {
+            err.set('titulo', 'Titulo no puede estar vacio.');
         }
         return err;
     }
@@ -127,9 +126,9 @@ const AddNewLibro= () => {
                         {errors && errors.get('nombre_editorial') && <p className="settings-error-validate-message">{errors.get('nombre_editorial')} Intenta de nuevo</p>}
                     </div>
                     <div class="col-3">
-                        <select class="form-select" aria-label="Default select example" onChange={(e) => handleChange('area', e)}>
+                        <select class="form-select" aria-label="Default select example" onChange={(e) => handleChange('id_area', e)}>
                             <option disabled selected>Seleccione una area</option>
-                            {editoriales.map(area => (
+                            {areas.map(area => (
                                 <option key={area.id_area} value = {area.id_area}>{area.descripcion_area}</option>
                             ))}
                         </select>

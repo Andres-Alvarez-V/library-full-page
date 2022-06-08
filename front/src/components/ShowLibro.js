@@ -7,7 +7,7 @@ const ShowLibro = () => {
     const deleteLibros = async id => {
         try{
             console.log(id);
-            const deletePrestamos = await fetch(`http://localhost:3000/delete_libros/${id}`, {
+            const deleteLibros = await fetch(`http://localhost:3000/delete_libro/${id}`, {
                 method: 'DELETE'
             });
             setLibros(libros.filter(libro => libro.id_libro !== id));
@@ -43,9 +43,8 @@ const ShowLibro = () => {
                         <thead>
                             <tr>
                             <th>Titulo</th>
-                            <th>Nombre</th>
                             <th>Editorial</th>
-                            <th>area</th>
+                            <th>Area</th>
                             <th>Eliminar</th>
                             </tr>
                         </thead>
@@ -53,8 +52,8 @@ const ShowLibro = () => {
                             {libros.map(libro => (
                                 <tr key={libro.id_libro}>
                                     <td>{libro.titulo}</td>
-                                    <td>{libro.area}</td>
-                                    <td>{libro.editorial}</td>
+                                    <td>{libro.id_editorial}</td>
+                                    <td>{libro.id_area}</td>
                                     <th><button className='btn btn-danger' 
                                     onClick={() => deleteLibros(libro.id_libro)}>Eliminar</button></th>
                                 </tr>
