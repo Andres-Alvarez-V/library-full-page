@@ -9,6 +9,13 @@ const PayFine = ({ infoPrestamo, getPrestamosMultados }) => {
         getPrestamosMultados();
     }
 
+
+    const handleChange = (e) => {
+        let updateValue = {...newValue};
+        updateValue["valor_multa"] = e.target.value;
+        setNewValue(updateValue);
+    }
+
      const updateFineValue = async (e) => {
         
         try {
@@ -21,7 +28,7 @@ const PayFine = ({ infoPrestamo, getPrestamosMultados }) => {
                 });
 
                 if(response.status === 200){
-                    // window.location = "/prestamos";
+                    window.location = "/prestamos";
                 }
         } catch (err) {
             console.log(err.message);
@@ -47,7 +54,7 @@ const PayFine = ({ infoPrestamo, getPrestamosMultados }) => {
 
 
                         <div class="modal-body">
-                            <input type="text" class="form-control" placeholder="Valor de multa" aria-label="Valor de multa" onChange={(e) => newValue["valor_multa"] = e.target.value}/>
+                            <input type="text" class="form-control" placeholder="Valor de multa" aria-label="Valor de multa" onChange={(e) => handleChange(e)}/>
                         </div>
 
 

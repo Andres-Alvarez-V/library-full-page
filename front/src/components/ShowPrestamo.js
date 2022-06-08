@@ -77,10 +77,7 @@ const ShowPrestamo = () => {
                             <th>Titulo Libro</th>
                             <th>Fecha de prestamo</th>
                             <th>Fecha de devolucion</th>
-                            <th>Devuelto</th>
-                            <th>Multa</th>
-                            <th>Fecha de pago</th>
-                            <th>Valor multa</th>
+                            <th>Multar</th>
                             <th>Eliminar</th>
                             </tr>
                         </thead>
@@ -92,12 +89,39 @@ const ShowPrestamo = () => {
                                     <td>{prestamo.titulo}</td>
                                     <td>{prestamo.fecha_prestamo}</td>
                                     <td>{prestamo.fecha_devolucion}</td>
-                                    <td>{prestamo.devuelto}</td>
-                                    <td>{prestamo.multa}</td>
-                                    <td>{prestamo.fecha_pago}</td>
-                                    <td>{prestamo.valor_multa}</td>
-                                    <th><button className='btn btn-danger' 
-                                    onClick={() => deletePrestamos(prestamo.id_lector)}>Eliminar</button></th>
+                                    <th><button className='btn btn-warning' onClick= { () => multarPrestamo(prestamo.id_lector, prestamo.id_libro, prestamo.fecha_prestamo)}>Multar</button></th>
+                                    <th><button className='btn btn-danger' onClick={() => deletePrestamos(prestamo.id_lector)}>Eliminar</button></th>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                </div>
+            }
+
+            {prestamosActivosMultados.length !== 0 && 
+                <div>
+                    <table className='table mt-2 text-center'>
+                        <thead>
+                            <tr>
+                            <th>Documento</th>
+                            <th>Nombre</th>
+                            <th>Titulo Libro</th>
+                            <th>Fecha de prestamo</th>
+                            <th>Fecha de devolucion</th>
+                            <th>Pagar</th>
+                            <th>Eliminar</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {prestamosActivosMultados.map(prestamo => (
+                                <tr key={`${prestamo.id_lector}${prestamo.id_libro}${prestamo.fecha_prestamo}`}>
+                                    <td>{prestamo.ci}</td>
+                                    <td>{prestamo.nombre}</td>
+                                    <td>{prestamo.titulo}</td>
+                                    <td>{prestamo.fecha_prestamo}</td>
+                                    <td>{prestamo.fecha_devolucion}</td>
+                                    <th><PayFine infoPrestamo = {prestamo} getPrestamosMultados = {getPrestamosMultados} /></th>
+                                    <th><button className='btn btn-danger' onClick={() => deletePrestamos(prestamo.id_lector)}>Eliminar</button></th>
                                 </tr>
                             ))}
                         </tbody>
